@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import users from "./users.json";
+import useFormattedData from "./hooks/useFormattedData";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+	const { formatted, sortBy, filter, search } = useFormattedData(users);
+
+	useEffect(() => {
+		search("Darill");
+		filter(({ zip }) => zip > 486);
+		sortBy("firstName");
+	}, []);
+
+	return (
+		<div>
+			{formatted.map(({ id, firstName, lastName, birthdate }) => (
+				<div key={id}>
+					<div>
+						{firstName} {lastName}
+					</div>
+					<div>{birthdate}</div>
+				</div>
+			))}
+		</div>
+	);
 }
 
 export default App;
